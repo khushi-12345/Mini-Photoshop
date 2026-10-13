@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini Photoshop Studio</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Mini Photoshop home">
+        <span class="brand-icon">Ps</span>
+        <span>Mini Photoshop <small>STUDIO</small></span>
+      </a>
+
+      <div class="top-actions">
+        <button id="undoBtn" class="top-btn" title="Undo">↶ Undo</button>
+        <button id="redoBtn" class="top-btn" title="Redo">↷ Redo</button>
+        <button id="resetBtn" class="top-btn">Reset</button>
+        <button id="downloadPng" class="primary-btn">↓ Export PNG</button>
+      </div>
+    </header>
+
+    <main class="app">
+      <aside class="toolbar">
+        <button class="tool active" data-tool="select" title="Select">
+          ⌖<span>Select</span>
+        </button>
+        <button class="tool" data-tool="brush" title="Brush">
+          🖌<span>Brush</span>
+        </button>
+        <button class="tool" data-tool="eraser" title="Eraser">
+          ◩<span>Eraser</span>
+        </button>
+        <button class="tool" data-tool="text" title="Text">
+          T<span>Text</span>
+        </button>
+        <button class="tool" data-tool="hand" title="Move canvas">
+          ✋<span>Move</span>
+        </button>
+        <div class="tool-separator"></div>
+        <label class="tool upload-tool" title="Upload image">
+          ＋<span>Upload</span>
+          <input id="imageUpload" type="file" accept="image/*" hidden />
+        </label>
+      </aside>
+
+      <section class="workspace">
+        <div class="workspace-header">
+          <div>
+            <strong id="documentName">Untitled project</strong>
+            <span class="document-status" id="status">Ready to edit</span>
+          </div>
+          <label class="secondary-btn upload-button">
+            Open Image
+            <input
+              id="imageUploadSecondary"
+              type="file"
+              accept="image/*"
+              hidden
+            />
+          </label>
+        </div>
+
+        <div class="canvas-area" id="canvasArea">
+          <div class="empty-state" id="emptyState">
+            <div class="empty-icon">▧</div>
+            <h2>Bring your ideas to life</h2>
+            <p>Upload an image to start editing.</p>
+            <label class="primary-btn choose-image">
+              Choose Image
+              <input
+                id="imageUploadEmpty"
+                type="file"
+                accept="image/*"
+                hidden
+              />
+            </label>
+            <p class="hint">JPG, PNG, WebP supported</p>
+          </div>
+          <canvas id="editorCanvas" hidden></canvas>
+        </div>
+
+        <footer class="canvas-footer">
+          <span id="imageDimensions">No image loaded</span>
+          <div class="zoom-controls">
+            <button id="zoomOut" title="Zoom out">−</button>
+            <span id="zoomValue">100%</span>
+            <button id="zoomIn" title="Zoom in">+</button>
+            <button id="fitBtn">Fit</button>
+          </div>
+        </footer>
+      </section>
+
+      <aside class="properties">
+        <div class="panel-heading">
+          <h2>Properties</h2>
+          <span class="live-dot"></span>
+        </div>
+
+        <section class="panel-section">
+          <h3>Image adjustments</h3>
+
+          <div class="control">
+            <div class="control-label">
+              <label for="brightness">Brightness</label
+              ><output id="brightnessValue">100%</output>
+            </div>
+            <input type="range" id="brightness" min="0" max="200" value="100" />
+          </div>
+
+          <div class="control">
+            <div class="control-label">
+              <label for="contrast">Contrast</label
+              ><output id="contrastValue">100%</output>
+            </div>
+            <input type="range" id="contrast" min="0" max="200" value="100" />
+          </div>
+
+          <div class="control">
+            <div class="control-label">
+              <label for="saturation">Saturation</label
+              ><output id="saturationValue">100%</output>
+            </div>
+            <input type="range" id="saturation" min="0" max="200" value="100" />
+          </div>
+
+          <div class="control">
+            <div class="control-label">
+              <label for="blur">Blur</label><output id="blurValue">0px</output>
+            </div>
+            <input
+              type="range"
+              id="blur"
+              min="0"
+              max="10"
+              step="0.5"
+              value="0"
+            />
+          </div>
+
+          <div class="control">
+            <div class="control-label">
+              <label for="opacity">Opacity</label
+              ><output id="opacityValue">100%</output>
+            </div>
+            <input type="range" id="opacity" min="0" max="100" value="100" />
+          </div>
+
+          <div class="control">
+            <div class="control-label">
+              <label for="grayscale">Grayscale</label
+              ><output id="grayscaleValue">0%</output>
+            </div>
+            <input type="range" id="grayscale" min="0" max="100" value="0" />
+          </div>
+
+          <div class="control">
+            <div class="control-label">
+              <label for="sepia">Sepia</label
+              ><output id="sepiaValue">0%</output>
+            </div>
+            <input type="range" id="sepia" min="0" max="100" value="0" />
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <h3>Quick filters</h3>
+          <div class="filter-grid">
+            <button class="filter-btn active" data-filter="normal">
+              <span class="filter-preview normal-preview"></span>Normal
+            </button>
+            <button class="filter-btn" data-filter="vintage">
+              <span class="filter-preview vintage-preview"></span>Vintage
+            </button>
+            <button class="filter-btn" data-filter="bw">
+              <span class="filter-preview bw-preview"></span>B&W
+            </button>
+            <button class="filter-btn" data-filter="warm">
+              <span class="filter-preview warm-preview"></span>Warm
+            </button>
+            <button class="filter-btn" data-filter="cool">
+              <span class="filter-preview cool-preview"></span>Cool
+            </button>
+            <button class="filter-btn" data-filter="dramatic">
+              <span class="filter-preview dramatic-preview"></span>Dramatic
+            </button>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <h3>Drawing tools</h3>
+          <div class="control">
+            <div class="control-label">
+              <label for="brushSize">Brush size</label
+              ><output id="brushSizeValue">8px</output>
+            </div>
+            <input type="range" id="brushSize" min="1" max="60" value="8" />
+          </div>
+          <div class="control">
+            <div class="control-label">
+              <label for="brushColor">Brush color</label>
+            </div>
+            <input type="color" id="brushColor" value="#ff3864" />
+          </div>
+          <p class="hint">
+            Choose Brush or Eraser on the left, then draw directly on the image.
+          </p>
+        </section>
+
+        <section class="panel-section">
+          <h3>Add text</h3>
+          <div class="control">
+            <label for="textInput">Your text</label>
+            <input
+              id="textInput"
+              class="text-input"
+              type="text"
+              placeholder="Type something..."
+            />
+          </div>
+          <div class="two-columns">
+            <div class="control">
+              <label for="fontSize">Font size</label>
+              <input
+                id="fontSize"
+                class="text-input"
+                type="number"
+                min="8"
+                max="200"
+                value="36"
+              />
+            </div>
+            <div class="control">
+              <label for="textColor">Text color</label>
+              <input id="textColor" type="color" value="#ffffff" />
+            </div>
+          </div>
+          <button id="addTextBtn" class="secondary-btn full-width">
+            ＋ Add Text to Image
+          </button>
+          <p class="hint">
+            Text appears in the center of the image. Choose the Text tool first.
+          </p>
+        </section>
+
+        <section class="panel-section export-section">
+          <h3>Export image</h3>
+          <div class="two-columns">
+            <button id="downloadPngPanel" class="secondary-btn">PNG</button>
+            <button id="downloadJpg" class="secondary-btn">JPG</button>
+          </div>
+          <p class="hint">
+            Your edited image is exported at its canvas resolution.
+          </p>
+        </section>
+      </aside>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
